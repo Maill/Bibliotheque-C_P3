@@ -1,0 +1,21 @@
+# depslib dependency file v1.0
+1480688475 source:f:\codeblocks projects\bibliotheque c\bibliotheque c - partie 3 - correction avancée\gestfile.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"init.h"
+
+1480692280 f:\codeblocks projects\bibliotheque c\bibliotheque c - partie 3 - correction avancée\init.h
+
+1480698960 source:f:\codeblocks projects\bibliotheque c\bibliotheque c - partie 3 - correction avancée\gestorth.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"init.h"
+
+1480693802 source:f:\codeblocks projects\bibliotheque c\bibliotheque c - partie 3 - correction avancée\main3.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"init.h"
+
