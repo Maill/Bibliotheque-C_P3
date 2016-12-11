@@ -48,44 +48,38 @@ static int Compare(const void *a, const void *b){
 }
 
 void WordsNotInDictionary(Program* startup){
-    char* fileName = malloc(sizeof(char) * 100);
     system("cls");
+    char* fileName = malloc(sizeof(char) * 50);
+    char* word = malloc(sizeof(char) * 50);
+    int line = 1;
     printf("           ------- Dictionnaire C -------\n------- Gestion des fichiers dictionnaire -------\n     ------- Liste des mots semblables : dictionnaire/fichier -------\n\n");
     printf("Nom du fichier texte : ");
     scanf("%s", fileName);
     strcat(fileName, ".txt");
-    FILE* textFile = fopen(fileName, "r+");
+    FILE* textFile = fopen(fileName, "r");
     if(CheckIfFileExists(startup, textFile) == 0){
         return;
     }
-    int line = 1;
-    while(!feof(textFile) && !ferror(textFile)){
-        char* word = malloc(sizeof(char) * 50);
-        fscanf(textFile, "%50[a-zA-Z-']%*[^a-zA-Z'-]", word);
-        int ch = getc(textFile);
-        /*if (ch == '\n'){ //CRASH
-            line++;
-        }*/
-        /*if(fscanf(textFile, "[\n]")){ //NE FONCTIONNE PAS
-            line++;
-        }*/
+    while(fscanf(textFile, "%50[a-zA-Z]%*[^a-zA-Z]", word) != -1){
         ToLowerCase(word);
         int indexLib = word[0] - 97;
-        if(CheckIfExists(startup, indexLib, word) == 1){
-            printf("%i. %s\n", line, word);
+        if(CheckIfExists(startup, indexLib, word) == 0){
+            printf("%i - %s\n", line, word);
         }
     }
+    free(word);
+    free(fileName);
     fclose(textFile);
 }
 
 void AdvancedWordSearch(Program* startup){
-    char* userWord = malloc(sizeof(char) * 100);
+    char* userWord = malloc(sizeof(char) * 50);
     int UserToleranceThreshold;
     printf("Mot : ");
     scanf("%s", userWord);
     getchar();
     ToLowerCase(userWord);
-    //Le seuil de tolérance correspond au nombre de caractères différant des caractères du mot saisi
+    //Le seuil de tolérance correspond au nombre de caractères différants des caractères du mot saisi
     printf("Seuil de tolerance (minimum 1) : ");
     scanf("%i", (int*)&UserToleranceThreshold);
     int indexLib = userWord[0] - 97;
