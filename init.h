@@ -22,32 +22,34 @@ struct Program {
 
 typedef struct Program Program;
 
-//Prototypes main2.c
+//Prototypes main3.c
 void FileMenu(Program*);
 void DicoMenu(Program*);
 
-//Prototypes gestrech.c
+//Prototypes gestorth.c
 //  - Load Lib
 void InitLibrary(Program*);
 void FillDicoFromFile(Program*);
 void FillDicoFromTextFile(Program*);
 //  - Lib's operations
+void ReplaceWordsInDocument(Program*);
+char* CompareWordsToReplace(Program*, char*, int);
+void SimilarWordsToWord(Program*);
 void WordsNotInDictionary(Program*);
-void AdvancedWordSearch(Program*);
 void CompareWords(Program*, char*, int);
 int Levenshtein(char*, char*);
-void CountTotalWords(Program*);
-void ToLowerCase(char*);
-void SortDico(Program*, int);
-int CheckIfExists(Program*, int, char*);
-int CheckIfFileExists(Program* startup, FILE* textFile);
-void WriteOnFile(Program*);
 void OverrideCapacity(Program*, int);
+void SortDico(Program*, int);
 void CleanDico(Program*);
 void Clean2DArray(char**, int);
-void SearchWord(Program*);
+void ToLowerCase(char*);
+void CountTotalWords(Program*);
+void WriteOnFile(Program*);
+int CheckIfExists(Program*, int, char*);
+int CheckIfFileExists(Program*, FILE*);
 
 //Prototypes gestfile.c
+void BuildALibFromText(Program*);
 void LoadFile(Program*);
 int IsFileEmpty(FILE*);
 

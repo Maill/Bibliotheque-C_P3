@@ -47,11 +47,99 @@ static int Compare(const void *a, const void *b){
    return strcmp(pa, pb);
 }
 
+//Parcourt et compare les mots entre eux en ne retournant que la première occurence
+void ReplaceWordsInDocument(Program* startup){
+    system("cls");
+    char* fileName = malloc(sizeof(char) * 50);
+    char* word = malloc(sizeof(char) * 50);
+    char* newWord = malloc(sizeof(char) * 50);
+    printf("           ------- Dictionnaire C -------\n------- Gestion des fichiers dictionnaire -------\n     ------- Liste des mots semblables : dictionnaire/fichier -------\n\n");
+    printf("Nom du fichier texte : ");
+    scanf("%s", fileName);
+    strcat(fileName, ".txt");
+    FILE* textFile = fopen(fileName, "r+");
+    if(CheckIfFileExists(startup, textFile) == 0){
+        return;
+    }
+    while(fscanf(textFile, "%50[a-zA-Z-']%*[^a-zA-Z'-]", word) != -1){ // NON FINI
+        int checkUpper = 0;
+        if(word[0] >= 65 && word[0] <= 90){ //Si le mot possède une majuscule au début (premier mot d'une phrase ou nom/prénom)
+            checkUpper = 1;
+        }
+        ToLowerCase(word);
+        int indexLib = word[0] - 97;
+        if(CheckIfExists(startup, indexLib, word) == 0){ //S'il n'existe pas
+            newWord = CompareWordsToReplace(startup, word, 1);
+            if(checkUpper == 1){
+                newWord[0] += 32;
+            }
+            //TODO
+        }
+    }
+    free(newWord);
+    free(word);
+    free(fileName);
+    fclose(textFile);
+}
+
+//Étape 3 de la partie 3 : construire automatiquement un fichier corrigé, en remplaçant les mots erronés par la première suggestion de la liste (seuil une lettre maximum)
+char* CompareWordsToReplace(Program* startup, char* word, int toleranceThreshold){ //toleranceThreshold = seuil de tolérance
+    char* closeWord = malloc(sizeof(char));
+    int i;
+    int j;
+    int check = 0;
+    for(i = 0; i < 26; i++){
+        for(j = 0; j < startup->dictionary[i].size; j++){
+            if(strcmp(word, startup->dictionary[i].words[j]) == 0){ //Si les 2 mots comparés sont identiques, on ignore et on continue
+                continue;
+            }else if((Levenshtein(word, startup->dictionary[i].words[j]) <= toleranceThreshold) &&
+                     (Levenshtein(word, startup->dictionary[i].words[j]) >= 1)){ //Si le résultat de "Levenshtein" retourne un nombre <= au seuil et >= à 1
+                closeWord = startup->dictionary[i].words[j];
+                check = 1;
+                if(check == 1){
+                    break;
+                }
+            }
+        }
+        if(check == 1){
+            break;
+        }
+    }
+    return closeWord;
+}
+
+//Étape 2 de la partie 3 : affiche la liste des mots n'existant pas dans le dictionnaire et proposer une liste de mots proches (seuil deux lettres maximum) pour chacun d'entre eux
+void SimilarWordsToWord(Program* startup){
+    system("cls");
+    char* fileName = malloc(sizeof(char) * 50);
+    char* word = malloc(sizeof(char) * 50);
+    printf("           ------- Dictionnaire C -------\n------- Gestion des fichiers dictionnaire -------\n     ------- Liste des mots semblables : dictionnaire/fichier -------\n\n");
+    printf("Nom du fichier texte : ");
+    scanf("%s", fileName);
+    strcat(fileName, ".txt");
+    FILE* textFile = fopen(fileName, "r");
+    if(CheckIfFileExists(startup, textFile) == 0){ //Si le fichier n'existe pas
+        return;
+    }
+    while(fscanf(textFile, "%50[a-zA-Z-']%*[^a-zA-Z'-]", word) != -1){
+        ToLowerCase(word);
+        int indexLib = word[0] - 97;
+        if(CheckIfExists(startup, indexLib, word) == 0 && strlen(word) > 1){ //Si le mot n'existe pas
+            printf("%s\n", word);
+            CompareWords(startup, word, 2);
+        }
+    }
+    free(word);
+    free(fileName);
+    fclose(textFile);
+}
+
+//Étape 1 de la partie 3 : affiche la liste des mots du fichier n'existant pas dans le dictionnaire, mais n'affiche pas la ligne des mots (TODO)
 void WordsNotInDictionary(Program* startup){
     system("cls");
     char* fileName = malloc(sizeof(char) * 50);
     char* word = malloc(sizeof(char) * 50);
-    int line = 1;
+    //int line = 1;
     printf("           ------- Dictionnaire C -------\n------- Gestion des fichiers dictionnaire -------\n     ------- Liste des mots semblables : dictionnaire/fichier -------\n\n");
     printf("Nom du fichier texte : ");
     scanf("%s", fileName);
@@ -60,45 +148,16 @@ void WordsNotInDictionary(Program* startup){
     if(CheckIfFileExists(startup, textFile) == 0){
         return;
     }
-    while(fscanf(textFile, "%50[a-zA-Z]%*[^a-zA-Z]", word) != -1){
+    while(fscanf(textFile, "%50[a-zA-Z]%*[^a-zA-Z]", word) != -1){ //Si le mot n'existe pas
         ToLowerCase(word);
         int indexLib = word[0] - 97;
         if(CheckIfExists(startup, indexLib, word) == 0){
-            printf("%i - %s\n", line, word);
+            printf("%s\n", word); //TODO : Comptage des lignes
         }
     }
     free(word);
     free(fileName);
     fclose(textFile);
-}
-
-void AdvancedWordSearch(Program* startup){
-    char* userWord = malloc(sizeof(char) * 50);
-    int UserToleranceThreshold;
-    printf("Mot : ");
-    scanf("%s", userWord);
-    getchar();
-    ToLowerCase(userWord);
-    //Le seuil de tolérance correspond au nombre de caractères différants des caractères du mot saisi
-    printf("Seuil de tolerance (minimum 1) : ");
-    scanf("%i", (int*)&UserToleranceThreshold);
-    int indexLib = userWord[0] - 97;
-    if(CheckIfExists(startup, indexLib, userWord) == 1){
-        system("cls");
-        printf("-- Le mot \"%s\" est dans le dictionnaire. --\n\n", userWord);
-    }else{
-        system("cls");
-        printf("-- Le mot \"%s\" n'existe pas dans le dictionnaire. --\n\n", userWord);
-    }
-    if(UserToleranceThreshold == 0){
-        UserToleranceThreshold = 1;
-    }
-    printf("-- Voici une liste de mots semblables au mot \"%s\" selon le seuil defini : --\n", userWord);
-    CompareWords(startup, userWord, UserToleranceThreshold);
-    printf("\n-- Mot saisi : %s --\n", userWord);
-    printf("-- Seuil defini : %i --\n\n", UserToleranceThreshold);
-    free(userWord);
-    free((int*)UserToleranceThreshold);
 }
 
 //Parcourt et compare les mots entre eux
@@ -124,7 +183,7 @@ void CompareWords(Program* startup, char* word, int toleranceThreshold){ //toler
     }
     //Affichage des mots similaires
     for(k = 0; k <= countCW; k++){
-        printf("%s\n", closeWords[k]);
+        printf("\t - %s\n", closeWords[k]);
     }
     Clean2DArray(closeWords, countCW);
 }
@@ -143,14 +202,14 @@ int Levenshtein(char* str1, char* str2){
 
      int column[str1Length+1];
 
-    for(y = 1; y <= str1Length; y++){
+    for(y = 1; y <= str1Length; y++){ //Assigne un nombre à chaque caractère du mot
         column[y] = y;
     }
     for(x = 1; x <= str2Length; x++){
         column[0] = x;
         for(y = 1, lastChar = x - 1; y <= str1Length; y++){
             oldChar = column[y];
-            column[y] = MIN3(column[y] + 1, column[y-1] + 1, lastChar + (str1[y-1] == str2[x-1] ? 0 : 1));
+            column[y] = MIN3(column[y] + 1, column[y-1] + 1, lastChar + (str1[y-1] == str2[x-1] ? 0 : 1)); //Algorithme de Levenshtein : voire documentation technique
             lastChar = oldChar;
         }
     }
@@ -304,6 +363,7 @@ int CheckIfExists(Program* startup, int indexLib, char* wordToCheck){
     return 0;
 }
 
+//Vérifie si le fichier existe
 int CheckIfFileExists(Program* startup, FILE* textFile){
     if(textFile == NULL){
         if(textFile != NULL){

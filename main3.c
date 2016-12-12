@@ -97,17 +97,17 @@ void DicoMenu(Program* startup){
     do{
         system("cls");
         printf("     ------- Dictionnaire C -------\n------- Manipulation des dictionnaires -------\n\n");
-        printf("1. Liste des mots semblables : dictionnaire/fichier\n2. Mots du fichier non-inclus dans le dictionnaire et propositions de mots\n4. Retour au menu principal\nChoix : ");
+        printf("1. Liste des mots semblables : dictionnaire/fichier\n2. Mots du fichier non-inclus dans le dictionnaire et propositions de mots\n3. Correction automatique du document\n4. Retour au menu principal\nChoix : ");
         scanf("%c", &choice);
         switch(choice){
             case '1':
                 WordsNotInDictionary(startup);
                 break;
             case '2':
-
+                SimilarWordsToWord(startup);
                 break;
             case '3':
-
+                ReplaceWordsInDocument(startup);
                 break;
             case '4':
                 system("cls");
