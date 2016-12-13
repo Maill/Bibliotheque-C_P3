@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "init.h"
+#include <ctype.h>
 
 //Define conçu pour la fonction Levenshtein
 #define MIN3(a, b, c) ((a) < (b) ? ((a) < (c) ? (a) : (c)) : ((b) < (c) ? (b) : (c)))
@@ -51,43 +52,62 @@ static int Compare(const void *a, const void *b){
 void ReplaceWordsInDocument(Program* startup){
     system("cls");
     char* fileName = malloc(sizeof(char) * 50);
-    char* word = malloc(sizeof(char) * 50);
-    char* newWord = malloc(sizeof(char) * 50);
     printf("           ------- Dictionnaire C -------\n------- Gestion des fichiers dictionnaire -------\n     ------- Liste des mots semblables : dictionnaire/fichier -------\n\n");
     printf("Nom du fichier texte : ");
     scanf("%s", fileName);
     strcat(fileName, ".txt");
     FILE* textFile = fopen(fileName, "r+");
+    FILE* tempFile = fopen("tempFile.txt", "w+");
     if(CheckIfFileExists(startup, textFile) == 0){
         return;
     }
-    while(fscanf(textFile, "%50[a-zA-Z-']%*[^a-zA-Z'-]", word) != -1){ // NON FINI
-        int checkUpper = 0;
-        if(word[0] >= 65 && word[0] <= 90){ //Si le mot possède une majuscule au début (premier mot d'une phrase ou nom/prénom)
-            checkUpper = 1;
-        }
-        ToLowerCase(word);
-        int indexLib = word[0] - 97;
-        if(CheckIfExists(startup, indexLib, word) == 0){ //S'il n'existe pas
-            newWord = CompareWordsToReplace(startup, word, 1);
-            if(checkUpper == 1){
-                newWord[0] += 32;
+    char ch = 0;
+    int line = 1;
+    int i = 0;
+    int count = 0;
+    char* oldWord = malloc(sizeof(char) * 50);
+    char* newWord = malloc(sizeof(char) * 50);
+    while((ch = fgetc(textFile)) != EOF){
+        if(isalpha(ch)){
+            oldWord[i] = ch;
+            i++;
+        }else{
+            //printf("\n%c\n",oldWord[i-1]);
+            int checkUpper = 0;
+            if(oldWord[0] >= 65 && oldWord[0] <= 90){ //Si le mot possède une majuscule au début (premier mot d'une phrase ou nom/prénom)
+                checkUpper = 1;
             }
-            //TODO
+            ToLowerCase(oldWord);
+            int indexLib = oldWord[0] - 97;
+            if(CheckIfExists(startup, indexLib, oldWord) == 0){ //Si le mot n'existe pas
+                printf("%i", count++);
+                newWord = CompareWordsToReplace(startup, oldWord, 1);
+                if(checkUpper == 1){
+                    newWord[0] += 32;
+                }
+                printf("NewWord : %s\n", newWord);
+                fprintf(tempFile, newWord);
+                newWord = realloc(newWord, sizeof(char) * 50);
+            }else{
+                printf("OldWord : %s\n", oldWord);
+                fprintf(tempFile, oldWord);
+                oldWord = realloc(oldWord, sizeof(char) * 50);
+            }
+            i = 0;
         }
     }
     free(newWord);
-    free(word);
+    free(oldWord);
     free(fileName);
     fclose(textFile);
+    fclose(tempFile);
 }
 
 //Étape 3 de la partie 3 : construire automatiquement un fichier corrigé, en remplaçant les mots erronés par la première suggestion de la liste (seuil une lettre maximum)
 char* CompareWordsToReplace(Program* startup, char* word, int toleranceThreshold){ //toleranceThreshold = seuil de tolérance
-    char* closeWord = malloc(sizeof(char));
+    char* closeWord = malloc(sizeof(char) * 50);
     int i;
     int j;
-    int check = 0;
     for(i = 0; i < 26; i++){
         for(j = 0; j < startup->dictionary[i].size; j++){
             if(strcmp(word, startup->dictionary[i].words[j]) == 0){ //Si les 2 mots comparés sont identiques, on ignore et on continue
@@ -95,14 +115,8 @@ char* CompareWordsToReplace(Program* startup, char* word, int toleranceThreshold
             }else if((Levenshtein(word, startup->dictionary[i].words[j]) <= toleranceThreshold) &&
                      (Levenshtein(word, startup->dictionary[i].words[j]) >= 1)){ //Si le résultat de "Levenshtein" retourne un nombre <= au seuil et >= à 1
                 closeWord = startup->dictionary[i].words[j];
-                check = 1;
-                if(check == 1){
-                    break;
-                }
+                return closeWord;
             }
-        }
-        if(check == 1){
-            break;
         }
     }
     return closeWord;

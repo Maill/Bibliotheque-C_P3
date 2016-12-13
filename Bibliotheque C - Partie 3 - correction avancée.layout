@@ -2,45 +2,28 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Debug" />
-	<File name="init.h" open="1" top="1" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="649" topLine="26" />
-		</Cursor>
-	</File>
 	<File name="gestorth.c" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1178" topLine="24" />
+			<Cursor1 position="3053" topLine="35" />
 		</Cursor>
 		<Folding>
-			<Collapse line="27" />
-			<Collapse line="40" />
-			<Collapse line="50" />
-			<Collapse line="85" />
-			<Collapse line="111" />
-			<Collapse line="137" />
-			<Collapse line="163" />
-			<Collapse line="191" />
-			<Collapse line="219" />
-			<Collapse line="225" />
-			<Collapse line="230" />
-			<Collapse line="260" />
-			<Collapse line="288" />
-			<Collapse line="304" />
-			<Collapse line="313" />
-			<Collapse line="323" />
-			<Collapse line="333" />
-			<Collapse line="355" />
-			<Collapse line="366" />
+			<Collapse line="28" />
+			<Collapse line="41" />
 		</Folding>
+	</File>
+	<File name="init.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="649" topLine="24" />
+		</Cursor>
 	</File>
 	<File name="gestfile.c" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="357" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="main3.c" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="main3.c" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="4057" topLine="85" />
+			<Cursor1 position="4060" topLine="86" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>
