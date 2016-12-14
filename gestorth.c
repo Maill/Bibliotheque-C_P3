@@ -62,7 +62,7 @@ void ReplaceWordsInDocument(Program* startup){
         return;
     }
     char ch = 0;
-    int line = 1;
+    //int line = 1;
     int i = 0;
     int count = 0;
     char* oldWord = malloc(sizeof(char) * 50);
@@ -135,11 +135,13 @@ void SimilarWordsToWord(Program* startup){
     if(CheckIfFileExists(startup, textFile) == 0){ //Si le fichier n'existe pas
         return;
     }
-    while(fscanf(textFile, "%50[a-zA-Z-']%*[^a-zA-Z'-]", word) != -1){
+    printf("Liste des mots similaires : ");
+    while(fscanf(textFile, "%50[a-zA-Z-'’]%*[^a-zA-Z'’-]", word) != -1){
         ToLowerCase(word);
         int indexLib = word[0] - 97;
         if(CheckIfExists(startup, indexLib, word) == 0 && strlen(word) > 1){ //Si le mot n'existe pas
             printf("%s\n", word);
+            //Appel de fonction pour chercher des mots similaires
             CompareWords(startup, word, 2);
         }
     }
@@ -162,11 +164,12 @@ void WordsNotInDictionary(Program* startup){
     if(CheckIfFileExists(startup, textFile) == 0){
         return;
     }
-    while(fscanf(textFile, "%50[a-zA-Z]%*[^a-zA-Z]", word) != -1){ //Si le mot n'existe pas
+    printf("Liste des mots inconnus du dictionnaire :\n");
+    while(fscanf(textFile, "%50[a-zA-Z-'’]%*[^a-zA-Z'’-]", word) != -1){ //Si le mot n'existe pas
         ToLowerCase(word);
         int indexLib = word[0] - 97;
         if(CheckIfExists(startup, indexLib, word) == 0){
-            printf("%s\n", word); //TODO : Comptage des lignes
+            printf("\t%s\n", word); //TODO : Comptage des lignes
         }
     }
     free(word);
@@ -204,17 +207,17 @@ void CompareWords(Program* startup, char* word, int toleranceThreshold){ //toler
 
 //Calcule la "distance" entre 2 mots selon le seuil de tolérance
 int Levenshtein(char* str1, char* str2){
-     int str1Length;
-     int str2Length;
-     int x;
-     int y;
-     int lastChar;
-     int oldChar;
+    int str1Length;
+    int str2Length;
+    int x;
+    int y;
+    int lastChar;
+    int oldChar;
 
-     str1Length = strlen(str1);
-     str2Length = strlen(str2);
+    str1Length = strlen(str1);
+    str2Length = strlen(str2);
 
-     int column[str1Length+1];
+    int column[str1Length+1];
 
     for(y = 1; y <= str1Length; y++){ //Assigne un nombre à chaque caractère du mot
         column[y] = y;
@@ -276,7 +279,8 @@ void FillDicoFromTextFile(Program* startup){
     char* nameOutExt;
     while(!feof(startup->f) && !ferror(startup->f)){
         char* word = malloc(sizeof(char) * 30);
-        fscanf(startup->f, "%30[a-zA-Z-']%*[^a-zA-Z'-]", word);
+        //Récupère chaque mot du fichier tant qu'il ne dépasse pas 30 caractères
+        fscanf(startup->f, "%30[a-zA-Z-'’]%*[^a-zA-Z'’-]", word);
         ToLowerCase(word);
         int indexLib = word[0] - 97;
         int sizeLib = startup->dictionary[indexLib].size;
