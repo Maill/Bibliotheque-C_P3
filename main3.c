@@ -30,9 +30,8 @@ int main(){
     Program* startup = InitMain();
     //Appel du "constructeur" pour initialiser les tableaux dictionnaire
     InitLibrary(startup);
-
+    char choice;
     do{
-        char choice;
         printf("------- Dictionnaire C -------\n\n");
         printf("Fichier charge : ");
         if (startup->loadedFileName == NULL) {
@@ -53,8 +52,11 @@ int main(){
             case '3':
                 return 0;
                 break;
+            default:
+                system("cls");
+                break;
         }
-    }while(1);
+    }while(choice != '1' || choice != '2' || choice != '3');
     return 0;
 }
 

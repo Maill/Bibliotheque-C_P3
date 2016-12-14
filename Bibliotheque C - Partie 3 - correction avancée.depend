@@ -60,3 +60,24 @@
 	<string.h>
 	"init.h"
 
+1481731737 source:c:\users\nicolas\documents\codeblocks projects\bibliotheque-c_p3\gestfile.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"init.h"
+
+1481714471 c:\users\nicolas\documents\codeblocks projects\bibliotheque-c_p3\init.h
+
+1481731645 source:c:\users\nicolas\documents\codeblocks projects\bibliotheque-c_p3\main3.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"init.h"
+
+1481731899 source:c:\users\nicolas\documents\codeblocks projects\bibliotheque-c_p3\gestorth.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"init.h"
+	<ctype.h>
+

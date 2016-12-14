@@ -15,10 +15,12 @@ void LoadFile(Program* startup){
         if(startup->f != NULL){
             system("cls");
             printf("/!\\ : Fichier non trouve, veuillez reessayer.\n\n");
+            getchar();
             return;
         }
         system("cls");
         printf("/!\\ : Fichier non trouve, veuillez reessayer.\n\n");
+        getchar();
         fclose(f);
         return;
     }
@@ -44,10 +46,12 @@ void BuildALibFromText(Program* startup){
         if(startup->f != NULL){
             system("cls");
             printf("/!\\ : Fichier non trouve, veuillez reessayer.\n\n");
+            getchar();
             return;
         }
         system("cls");
         printf("/!\\ : Fichier non trouve, veuillez reessayer.\n\n");
+        getchar();
         fclose(f);
         return;
     }

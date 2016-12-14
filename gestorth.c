@@ -145,6 +145,8 @@ void SimilarWordsToWord(Program* startup){
             CompareWords(startup, word, 2);
         }
     }
+    getchar();
+    printf("\n");
     free(word);
     free(fileName);
     fclose(textFile);
@@ -165,13 +167,15 @@ void WordsNotInDictionary(Program* startup){
         return;
     }
     printf("Liste des mots inconnus du dictionnaire :\n");
-    while(fscanf(textFile, "%50[a-zA-Z-'’]%*[^a-zA-Z'’-]", word) != -1){ //Si le mot n'existe pas
+    while(fscanf(textFile, "%50[a-zA-Z-']%*[^a-zA-Z'-]", word) != -1){ //Si le mot n'existe pas
         ToLowerCase(word);
         int indexLib = word[0] - 97;
         if(CheckIfExists(startup, indexLib, word) == 0){
             printf("\t%s\n", word); //TODO : Comptage des lignes
         }
     }
+    getchar();
+    printf("\n");
     free(word);
     free(fileName);
     fclose(textFile);
@@ -271,7 +275,6 @@ void FillDicoFromFile(Program* startup){
         SortDico(startup, i);
     }
     WriteOnFile(startup);
-    printf("\n-- Le fichier a ete charge. --\n\n");
 }
 
 //Remplit le tableau à l'aide d'un texte
@@ -387,10 +390,12 @@ int CheckIfFileExists(Program* startup, FILE* textFile){
         if(textFile != NULL){
             system("cls");
             printf("/!\\ : Fichier non trouve, veuillez reessayer.\n\n");
+            getchar();
             return 0;
         }
         system("cls");
         printf("/!\\ : Fichier non trouve, veuillez reessayer.\n\n");
+        getchar();
         fclose(textFile);
         return 0;
     }
